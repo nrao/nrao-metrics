@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # gbt-report: build a HTML table of project info in a given quarter
 
+import csv
 import sys
 
 from jinja2 import Template
 
-import proposal
-import projects
+import proposals
 
 template = Template("""
   <style type="text/css">
@@ -56,19 +56,28 @@ template = Template("""
 
 def get_projects(quarter_name=None):
     "Get project name,hour pairs for given quarter, default: latest quarter."
-    return projects.get(quarter_name)
+    projects = []
+    for project in csv.DictReader(open('projects.csv')):
+        if project.get('tel', '').upper() != 'GBT':
+            continue
+        if project.get('legacy_id'):
+            name = project.get('legacy_id', '')
+        else:
+            name = project.get('proposal_id', '')
+        projects.append((name, project.get('hours', 0),))
+    return projects
 
 def get_details(projects):
     "Fill in given projects with details from proposal."
     details = []
     for project in projects:
         project_name, project_hours = project
-        project_name = project_name.replace('-', '_')
-        proposal_info = proposal.get(project_name)
+        proposal_info = proposals.get(project_name)
         if not proposal_info:
             print >>sys.stderr, 'no proposal info for', project_name
             details.append([project_name, '', '', project_hours])
         else:
+            project_name = proposal_info.get('proposal_id', project_name)
             details.append([project_name,
                             '<br/>'.join(proposal_info['investigators']),
                             proposal_info['title'],

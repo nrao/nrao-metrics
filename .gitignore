@@ -4,6 +4,7 @@ projects_*.csv
 author/
 coversheet/
 proposals.dat
+gbt-report.html
 
 *~
 *.pyc
@@ -13,5 +14,7 @@ distribute*.t*
 python-env
 virtualenv.py
 cookie.txt
+googlechart
+template-engine
 nraouserdb
 in-env

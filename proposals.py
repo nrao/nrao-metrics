@@ -81,6 +81,11 @@ def dump(obj):
 def load():
     return cPickle.load(open('proposals.dat', 'r'))
 
+def get(project_name):
+    lookup = cPickle.load(open('proposals.dat', 'r'))
+    return lookup.get(project_name, None)
+
+
 if __name__ == '__main__':
     import user
     os.chdir('coversheet')

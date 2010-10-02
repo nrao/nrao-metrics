@@ -17,8 +17,8 @@ projects_countries_pi.csv: projects_pi.csv
 projects_distinct.csv: projects.csv
 	./project.py accumulate > projects_distinct.csv
 
-gbt-report.html: projects_pi.csv proposals.dat in-env template-engine
-	./in-env ./gbt-report.py
+gbt-report.html: projects.csv proposals.dat in-env template-engine
+	./in-env ./gbt-report.py > gbt-report.html
 
 proposals.dat: proposals remove_empty
 	./proposals.py
