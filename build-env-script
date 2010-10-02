@@ -1,0 +1,9 @@
+#!/bin/bash
+
+script=in-env
+
+echo '#!/bin/bash' > $script
+echo >> $script
+echo 'source python-env/bin/activate' >> $script
+echo 'exec $@' >> $script
+chmod 755 $script

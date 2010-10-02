@@ -24,8 +24,14 @@ def build(filenames):
     need0_re = re.compile('^([A|B][A-Z])(\d\d\d)$')
     megadict = {}
     for filename in filenames:
-        coversheet_info = coversheet.parse('coversheet/' + filename)[0]
-        authors_info = authors.parse('author/' + filename)
+        try:
+            coversheet_info = coversheet.parse('coversheet/' + filename)[0]
+        except:
+            continue
+        try:
+            authors_info = authors.parse('author/' + filename)
+        except:
+            continue
 
         relevant = {}
         for key in relevant_coversheet_keys:

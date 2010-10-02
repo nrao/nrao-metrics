@@ -51,8 +51,7 @@ googlechart: in-env
 	touch googlechart
 
 in-env: python-env
-	echo '#!/bin/bash\n\nsource python-env/bin/activate\nexec $$@' > in-env
-	chmod a+x in-env
+	./build-env-script
 
 python-env: virtualenv.py
 	python virtualenv.py --no-site-packages --distribute python-env
