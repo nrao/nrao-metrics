@@ -1,0 +1,26 @@
+#!/bin/bash
+
+cookie=cookie.txt
+api=http://my.nrao.edu/nrao-2.0/secure/QueryFilter.htm
+
+function get_cookie () {
+    echo creating a new $cookie
+    echo logging as $USER
+    echo when prompted, provide your password for $api
+    echo
+    echo
+    echo
+    exec nraouserdb-query -L $api -c $cookie -u $USER -A $USER > /dev/null
+}
+
+if ( ! ls $cookie >/dev/null 2>&1 ); then
+    echo no $cookie found
+    get_cookie
+else
+    if [ -n "`find cookie.txt -mmin +60`" ]; then
+        echo $cookie is over 1 hour old, removing it
+        rm $cookie
+        get_cookie
+    fi
+fi
+
