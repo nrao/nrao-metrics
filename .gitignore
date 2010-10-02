@@ -1,3 +1,9 @@
+projects.csv
+projects_categories.csv
+projects_countries_pi.csv
+projects_pi.csv
+*.png
+
 *~
 *.pyc
 *.egg
