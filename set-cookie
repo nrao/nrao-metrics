@@ -3,6 +3,9 @@
 cookie=cookie.txt
 api=http://my.nrao.edu/nrao-2.0/secure/QueryFilter.htm
 
+# Fail on any command failure.
+set -e
+
 function get_cookie () {
     echo creating a new $cookie
     echo logging as $USER
@@ -10,7 +13,9 @@ function get_cookie () {
     echo
     echo
     echo
-    exec nraouserdb-query -L $api -c $cookie -u $USER -A $USER > /dev/null
+    nraouserdb-query -L $api -c $cookie -u $USER -A $USER > /dev/null
+    sed 's/TRUE\t\t/TRUE\t0\t/g' $cookie > ${cookie/.txt/.tmp}
+    mv ${cookie/.txt/.tmp} $cookie
 }
 
 if ( ! ls $cookie >/dev/null 2>&1 ); then

@@ -1,8 +1,8 @@
 #!/usr/bin/env python
-# This file is simply meant to give structure to otherwise throwaway code.
 
 import copy
 import csv
+import os
 import subprocess
 import sys
 
@@ -81,7 +81,6 @@ def get_coversheet_info(project_id):
         return coversheets[0]
 
 def get_authors_file(project_id):
-    project_id = clean_project_id(project_id)
     return subprocess.call(['./get_authors.sh', project_id]) == 0
 
 def get_authors_info(project_id, tel=None):
@@ -118,11 +117,17 @@ def get_files(filepath='projects.csv'):
 def _get_files(openfile=sys.stdin):
     projects = get_projects(openfile)
     for project in projects:
-        project_id = project['legacy_id']
+        os.environ.pop('PROPOSAL_ID', None)
+        if project['tel'] == 'GBT':
+            project_id = project['proposal_id']
+            os.environ['PROPOSAL_ID'] = 'true'
+        else:
+            project_id = project['legacy_id']
+            os.environ.pop('PROPOSAL_ID', None)
         get_coversheet_file(project_id)
         get_authors_file(project_id)
 
-def spay_cats(filepath='projects.csv'):
+def spay_cats(filepath='projects_distinct.csv'):
     return _spay_cats(open(filepath))
 
 def _spay_cats(openfile):
@@ -199,7 +204,7 @@ def _share_authors(openfile=sys.stdin, pi_only=False):
 
     write_projects(new_projects, fieldnames=author_fields)
 
-def calculate_pi(filepath='projects.csv'):
+def calculate_pi(filepath='projects_distinct.csv'):
     return _share_authors(open(filepath), pi_only=True)
 
 commands = {'resolve': resolve_proposal_ids,

@@ -4,6 +4,8 @@ import copy
 import csv
 import iso
 
+from pygooglechart import MapChart
+
 for mode in ('pi',):
     # build base dictionary of states
     base_states = dict(zip(iso.iso_state.keys(), [0] * len(iso.iso_state.keys())))
@@ -47,3 +49,21 @@ for mode in ('pi',):
         for country in country_list:
             country_writer.writerow([tel, country,
                                      '%.02f' % countries[tel][country]])
+
+    # Now for the experimental chart generation.
+
+    all_countries = copy.deepcopy(countries['all'])
+
+    all_countries.pop('')
+    chart = MapChart(440, 220)
+    chart.set_colours(('FFFFFF', 'CCCCCC', '000000'))
+    chart.set_codes(all_countries.keys())
+    chart.add_data(all_countries.values())
+    chart.download('projects_countries_all_telescopes_' + mode + '.png')
+
+    all_countries.pop('US')
+    chart = MapChart(440, 220)
+    chart.set_colours(('FFFFFF', 'CCCCCC', '000000'))
+    chart.set_codes(all_countries.keys())
+    chart.add_data(all_countries.values())
+    chart.download('projects_countries_foreign_all_telescopes_' + mode +'.png')
