@@ -1,5 +1,5 @@
 # Create projects.csv as input!
-all: projects.csv projects_pi.csv projects_categories.csv projects_countries_pi.csv
+all: projects.csv projects_pi.csv projects_categories.csv projects_countries_pi.csv gbt-report.html
 
 projects.csv:
 	echo create projects.csv as input
@@ -16,6 +16,12 @@ projects_countries_pi.csv: projects_pi.csv
 
 projects_distinct.csv: projects.csv
 	./project.py accumulate > projects_distinct.csv
+
+gbt-report.html: projects_pi.csv proposals.dat in-env template-engine
+	./in-env ./gbt-report.py
+
+proposals.dat: proposals remove_empty
+	./proposals.py
 
 maps: in-env googlechart projects_pi.csv
 	./in-env ./geo_breakdown_maps.py
@@ -34,6 +40,10 @@ recent-cookie: nraouserdb in-env
 nraouserdb: in-env
 	./in-env easy_install -f 'http://www.cv.nrao.edu/~kgroner/python/#nraouserdb' nraouserdb
 	touch nraouserdb
+
+template-engine: in-env
+	./in-env easy_install jinja2
+	touch template-engine
 
 googlechart: in-env
 	./in-env easy_install pygooglechart

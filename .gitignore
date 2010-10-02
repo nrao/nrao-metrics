@@ -3,6 +3,7 @@ projects_*.csv
 *.png
 author/
 coversheet/
+proposals.dat
 
 *~
 *.pyc
