@@ -4,6 +4,7 @@ all: projects.csv projects_pi.csv projects_categories.csv projects_countries_pi.
 projects.csv:
 	echo create projects.csv as input
 	echo with columns 'tel,legacy_id,proposal_id,hours'
+	ls projects.csv
 
 projects_pi.csv: projects_distinct.csv projects_collected.csv proposals
 	./project.py pi > projects_pi.csv
